@@ -1,0 +1,15 @@
+amqp==2.1.4
+anyjson==0.3.3
+appdirs==1.4.0
+billiard==3.3.0.23
+celery==3.1.25
+CouchDB==1.1
+Django==1.10.5
+django-celery==3.2.1
+djangorestframework==3.5.4
+kombu==3.0.37
+packaging==16.8
+pyparsing==2.1.10
+pytz==2016.10
+six==1.10.0
+vine==1.1.3
