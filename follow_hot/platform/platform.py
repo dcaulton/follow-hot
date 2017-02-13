@@ -25,5 +25,17 @@ class Platform(object):
             status_dict.update([x.split('=', 1) for x in response.content.split()])
             azimuth = float(status_dict['status.Postion[0]']) # YES, Amcrest misspelled Position in their API 
             zenith = float(status_dict['status.Postion[1]'])
+            # todo: convert from [180-360,0-180],[0-100] to [0-360], [0-100]
             return (azimuth, zenith)
         raise Exception('bad return code from getting platform position: {0}'.format(response.status_code))
+    def goto_position(self, azimuth, zenith):
+        the_url = 'http://{0}:{1}@{2}/cgi-bin/ptz.cgi?action=start&channel=0&code=PositionABS'\
+            '&arg1={3}&%arg2={4}&arg3=0'.format(
+            getattr(settings, 'PLATFORM_USERNAME', None),
+            getattr(settings, 'PLATFORM_PASSWORD', None),
+            getattr(settings, 'PLATFORM_HOSTNAME', None),
+            azimuth,
+            zenith)
+        response = requests.get(the_url)
+        if response.status_code != 200:
+            raise Exception('bad return code from goto platform position: {0}'.format(response.status_code))
