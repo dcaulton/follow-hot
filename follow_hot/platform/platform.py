@@ -5,6 +5,11 @@ import requests
 class Platform(object):
 
 
+    # The Amcrest platform supports 360 degrees horiz and about 120 degrees vertical.
+    # azimuth goes clockwise from 180deg behind to 360deg in front,
+    #     counterclockwise from 180deg behind to 0deg in front
+    # zenith goes from settings.PLATFORM_MINIMUM_ZENITH = -10deg to 0deg horizontal,
+    #     to settings.PLATFORM_MAXIMUM_ZENITH (~100deg) straight up
     def __init__(self, *args, **kwargs):
         pass
 
