@@ -21,7 +21,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'event',
+    'follow_hot',
+    'images',
+    'platform',
     'server',
+    'system',
+    'thermalcam',
+    'webcam',
 ]
 
 MIDDLEWARE = [
@@ -103,3 +110,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 
 STATIC_URL = '/static/'
+
+PLATFORM_HOSTNAME = os.environ.get('PLATFORM_HOSTNAME')
+PLATFORM_USERNAME = os.environ.get('PLATFORM_USERNAME')
+PLATFORM_PASSWORD = os.environ.get('PLATFORM_PASSWORD')
