@@ -9,6 +9,10 @@ class Image(models.Model):
     azimuth = models.FloatField()
     zenith = models.FloatField()
 
+    @property
+    def path(self):
+        return self.get_path_for_image_id(self.id)
+
     @classmethod
     def get_path_for_image_id(cls, id):
         return os.path.join('/tmp', str(id) + '.jpg')

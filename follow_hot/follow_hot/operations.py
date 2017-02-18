@@ -23,13 +23,12 @@ def snap_thermal():
 
 def diff_images_to_file(image1, image2):
     # a little clunky but a necessary step towards doing it all in memory
-    image1_path = Image.get_path_for_image_id(image1.id)
-    image2_path = Image.get_path_for_image_id(image1.id)
-    i1 = cv2.imread(image1_path)
-    i2 = cv2.imread(image2_path)
-    id = uuid.uuid4()
-    image_path = Image.get_path_for_image_id(id)
-    cv2.imwrite(image_path, i1-i2)
-    i = Image(id=id, azimuth=999, zenith=999)
-    i.save()
-    return i
+    if image1.azimuth != image2.azimuth or image1.zenith != image2.zenith:
+        print 'warning: diffing two images at diff coordinates is kinda silly'
+    cv2_image1 = cv2.imread(image1.path)
+    cv2_image2 = cv2.imread(image2.path)
+    image3 = Image(id=uuid.uuid4(), azimuth=image1.azimuth, zenith=image1.zenith)
+    cv2_image3 = cv2.subtract(cv2_image1, cv2_image2)
+    cv2.imwrite(image3.path, cv2_image3)
+    image3.save()
+    return image3
