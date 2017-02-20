@@ -1,6 +1,7 @@
 import uuid
 
 import cv2
+from PIL import Image as PIL_Image, ImageFilter
 
 from images.models import Image
 from platform.platform import Platform
@@ -21,6 +22,24 @@ def snap_thermal():
     image_path = Image.get_path_for_image_id(id)
     c.capture_image(image_path)
     i = Image(id=id, azimuth=azimuth, zenith=zenith, camera_type='thermal')
+    i.save()
+    return i
+
+def scale_thermal_and_save(thermal_image):
+    id = uuid.uuid4()
+    new_image_path = Image.get_path_for_image_id(id)
+    # scale image
+    pil_image_in = PIL_Image.open(thermal_image.path)
+    scale_method = PIL_Image.BICUBIC
+    width = 640
+    height = 480
+    pil_image_new = pil_image_in.resize((width, height), scale_method)
+    # blur scaled image
+    for i in range(1, 10):
+        pil_image_new = pil_image_new.filter(ImageFilter.BLUR)
+    # save new image and return
+    pil_image_new.save(new_image_path)
+    i = Image(id=id, azimuth=thermal_image.azimuth, zenith=thermal_image.zenith, camera_type='thermal')
     i.save()
     return i
 

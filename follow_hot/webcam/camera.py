@@ -1,3 +1,4 @@
+from io import BytesIO
 import requests
 
 from django.conf import settings
@@ -16,11 +17,7 @@ class WebCam(object):
         response = requests.get(the_url)
         
         if response.status_code == 200:
-#            import pdb; pdb.set_trace()
-            print 'yay'
             with open(filename, 'wb') as fd:
-                for chunk in response.iter_content(chunk_size=4096):
-                    fd.write(chunk)
-            fd.close()
+                fd.write(response.content)
             return
         raise Exception('bad return code from getting webcam image: {0}'.format(response.status_code))
