@@ -5,19 +5,34 @@ import cv2
 from images.models import Image
 from platform.platform import Platform
 from thermalcam.camera import ThermalCam
+from webcam.camera import WebCam
 
 def goto_position(azimuth, zenith):
+    # positions the camera to specified a&z = (180,0) is straight ahead
     p = Platform()
     p.goto_position(azimuth, zenith)
 
 def snap_thermal():
+    # wrapper to snap a thermal pic, get position and save it as an image
     p = Platform()
     (azimuth, zenith) = p.get_position()
     c = ThermalCam()
     id = uuid.uuid4()
     image_path = Image.get_path_for_image_id(id)
     c.capture_image(image_path)
-    i = Image(id=id, azimuth=azimuth, zenith=zenith)
+    i = Image(id=id, azimuth=azimuth, zenith=zenith, camera_type='thermal')
+    i.save()
+    return i
+
+def snap_webcam():
+    # wrapper to snap a webcam pic, get position and save it as an image
+    p = Platform()
+    (azimuth, zenith) = p.get_position()
+    c = WebCam()
+    id = uuid.uuid4()
+    image_path = Image.get_path_for_image_id(id)
+    c.capture_image(image_path)
+    i = Image(id=id, azimuth=azimuth, zenith=zenith, camera_type='webcam')
     i.save()
     return i
 
